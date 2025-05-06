@@ -305,3 +305,17 @@ step-3
 hadoop fs -cat dir2/part-r-00000
 
 
+#WordCount cloudera Terminal Commands 2---------------------------------------------------------------------------------->
+
+-> ls
+-> cat > /home/Cloudera/Processfile1.txt
+    ........
+    ....file content..
+    ...Ctrl z to exit...
+-> hdfs dfs -ls
+-> hdfs dfs -mkdir /inputfolder1
+-> hdfs dfs -put /home/Cloudera/Processfile1.txt /inputfolder1/
+-> hdfs dfs -cat /inputfolder1/Processfile1.txt
+-> hadoop jar /home/Cloudera/WordCount.jar WordCount/inputfolder1/Processfile1.txt/out1
+-> hdfs dfs -ls /out1
+-> hdfs dfs -cat /out1/part-r-00000
