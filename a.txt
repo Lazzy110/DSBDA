@@ -319,3 +319,33 @@ hadoop fs -cat dir2/part-r-00000
 -> hadoop jar /home/Cloudera/WordCount.jar WordCount/inputfolder1/Processfile1.txt/out1
 -> hdfs dfs -ls /out1
 -> hdfs dfs -cat /out1/part-r-00000
+
+
+
+
+
+
+-- Create a database for the integrated tables (optional but recommended)
+CREATE DATABASE IF NOT EXISTS hbase_integration_db;
+
+-- Use the database
+USE hbase_integration_db;
+
+-- Create an external Hive table that maps to the HBase table
+CREATE EXTERNAL TABLE user_sessions_hive (
+    session_id STRING,          -- Hive column mapped to HBase Row Key
+    user_id STRING,             -- Hive column mapped to details:user_id
+    login_time BIGINT           -- Hive column mapped to details:login_time (assuming timestamp as a BIGINT)
+    -- Add other columns based on your HBase table's column families and qualifiers
+)
+STORED BY 'org.apache.hadoop.hive.hbase.HBaseStorageHandler' -- Specify the HBase Storage Handler
+WITH SERDEPROPERTIES (
+    "hbase.columns.mapping" = ":key,details:user_id,details:login_time" -- Map Hive columns to HBase row key and columns
+    -- Add mappings for other columns if any
+)
+TBLPROPERTIES (
+    "hbase.table.name" = "user_sessions", -- Specify the name of your HBase table
+    "hbase.mapreduce.input.hbaseinputformat.scan.column.family" = "details" -- Optional: Specify column families to scan
+);
+
+
